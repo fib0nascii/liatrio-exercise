@@ -11,4 +11,6 @@ COPY . .
 
 RUN go build -o time time.go
 
+EXPOSE $PORT
+
 CMD ["./time"]
