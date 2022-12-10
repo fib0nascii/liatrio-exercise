@@ -20,5 +20,5 @@ func fetchTime(c *gin.Context) {
 func main() {
 	router := gin.Default()
 	router.GET("/time", fetchTime)
-	router.Run("localhost:8080")
+	router.Run()
 }
