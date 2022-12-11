@@ -7,13 +7,9 @@ usage() {
   exit 1
 }
 
-if [ ${#} -ne 2]; then
+if [ ${#} -ne 2 ] ; then
   usage
 fi
-
-echo "*** Build Docker Image ***"
-docker build . -t liatrio-time-exercise
-
 
 echo "*** Launching Environment ***"
 
@@ -21,3 +17,8 @@ cd terraform
 terraform init
 terraform plan -out out.terraform
 terraform apply out.terraform
+
+echo "*** Build Docker Image ***"
+docker build . -t liatrio-time-exercise
+
+
