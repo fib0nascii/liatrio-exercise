@@ -10,7 +10,7 @@ provider "kubernetes" {
 
 provider "aws" {
   region = var.region
-}git s
+}
 
 data "aws_availability_zones" "available" {}
 

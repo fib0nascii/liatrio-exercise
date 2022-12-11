@@ -28,3 +28,22 @@ resource "aws_ecr_repository_policy" "liatrio-exercise-repo-policy" {
   }
   EOF
 }
+
+ecr_access_policy = aws.iam.Policy(
+"ecr-access-iam-policy",
+policy="""{
+"Version": "2012-10-17",
+"Statement": [
+{
+"Effect": "Allow",
+"Action": [
+"ecr:BatchCheckLayerAvailability",
+"ecr:BatchGetImage",
+"ecr:GetDownloadUrlForLayer",
+"ecr:GetAuthorizationToken"
+],
+"Resource": "*"
+}
+]
+}"""
+)
