@@ -16,9 +16,11 @@ echo "*** Launching Environment ***"
 cd terraform
 terraform init
 terraform plan -out out.terraform
-terraform apply out.terraform
+terraform apply out.terraforme
 
 echo "*** Build Docker Image ***"
 docker build . -t liatrio-time-exercise
 
+echo "*** Login To ECR ***"
 
+echo "*** Deploy App To Kubernetes ***"
