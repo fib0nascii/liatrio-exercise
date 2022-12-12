@@ -23,4 +23,8 @@ docker build . -t liatrio-time-exercise
 
 echo "*** Login To ECR ***"
 
+echo "*** Push Docker Image To ECR ***"
+
+echo "*** Create Kubernetes Namespace"
+
 echo "*** Deploy App To Kubernetes ***"
