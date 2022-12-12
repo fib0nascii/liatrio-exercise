@@ -16,9 +16,10 @@ echo "*** Launching Environment ***"
 cd terraform
 terraform init
 terraform plan -out out.terraform
-terraform apply out.terraform
+terraform apply out.
 
 echo "*** Build Docker Image ***"
+cd ..
 docker build . -t 798870450882.dkr.ecr.us-east-1.amazonaws.com/liatrio-exercise-repo:latest
 
 echo "*** Login To ECR ***"
