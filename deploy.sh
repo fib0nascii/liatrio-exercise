@@ -16,14 +16,16 @@ echo "*** Launching Environment ***"
 cd terraform
 terraform init
 terraform plan -out out.terraform
-terraform apply out.terraforme
+terraform apply out.terraform
 
 echo "*** Build Docker Image ***"
-docker build . -t liatrio-time-exercise
+docker build . -t 798870450882.dkr.ecr.us-east-1.amazonaws.com/liatrio-exercise-repo:latest
 
 echo "*** Login To ECR ***"
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 798870450882.dkr.ecr.us-east-1.amazonaws.com/liatrio-exercise-repo
 
 echo "*** Push Docker Image To ECR ***"
+docker push 798870450882.dkr.ecr.us-east-1.amazonaws.com/liatrio-exercise-repo:latest
 
 echo "*** Create Kubernetes Namespace"
 
