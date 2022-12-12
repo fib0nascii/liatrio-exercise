@@ -16,7 +16,7 @@ echo "*** Launching Environment ***"
 cd terraform
 terraform init
 terraform plan -out out.terraform
-terraform apply out.
+terraform apply out.terraform
 
 echo "*** Build Docker Image ***"
 cd ..
