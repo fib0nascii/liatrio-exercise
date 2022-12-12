@@ -28,6 +28,9 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 echo "*** Push Docker Image To ECR ***"
 docker push 798870450882.dkr.ecr.us-east-1.amazonaws.com/liatrio-exercise-repo:latest
 
+echo "*** Update Kube-Config for EKS ***"
+
 echo "*** Create Kubernetes Namespace"
+kubectl create namespace liatrio-time-exercise
 
 echo "*** Deploy App To Kubernetes ***"
