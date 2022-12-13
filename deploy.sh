@@ -36,7 +36,7 @@ echo "*** Deploy Service To EKS Cluster ***"
 #kubectl apply -f service.yaml
 
 echo "*** Download IAM Policy For Load Balancer Controller ***"
-curl -o iam_policy_us-gov.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.4/docs/install/iam_policy_us-gov.json
+curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.4/docs/install/iam_policy.json
 
 echo "*** Apply Controller IAM Policy ***"
 aws iam create-policy \
@@ -45,9 +45,56 @@ aws iam create-policy \
 
 echo "*** Create IAM Role For Load Balancer Controller ***"
 eksctl create iamserviceaccount \
-  --cluster=${CLUSTERNAME} \
-  --namespace=liatrio-time-exercise \
-  --name=aws-load-balancer-controller \
-  --role-name "AmazonEKSLoadBalancerControllerRole" \
-  --attach-policy-arn=arn:aws:iam::111122223333:policy/AWSLoadBalancerControllerIAMPolicy \
-  --approve
+--cluster=${CLUSTERNAME} \
+--namespace=liatrio-time-exercise \
+--name=aws-load-balancer-controller \
+--role-name "AmazonEKSLoadBalancerControllerRole" \
+--attach-policy-arn=arn:aws:iam::111122223333:policy/AWSLoadBalancerControllerIAMPolicy \
+--approve \
+--override-existing-serviceaccounts
+
+echo "*** Install Cert Manager ***"
+kubectl apply \
+    --validate=false \
+    -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
+
+echo "*** Download Controller Manifest ***"
+curl -Lo v2_4_4_full.yaml https://github.com/kubernetes-sigs/aws-load-balancer-controller/releases/download/v2.4.4/v2_4_4_full.yaml
+if [ $? -eq 0 ]; then
+   echo "Download Ok"
+else 
+   echo "Download Failed"
+fi
+
+echo "*** Remove Sevice Account Section From Manifest ***"
+sed -i.bak -e '480,488d' ./v2_4_4_full.yaml
+if [ $? -eq 0 ]; then
+   echo "Replacement In Manifest Succeeded"
+else
+   echo "Replacement In Manifest Failed"
+fi
+
+echo "*** Add Cluster Name To Manifest ***"
+sed -i.bak -e "s|your-cluster-name|${CLUSTERNAME}|" ./v2_4_4_full.yaml
+if [ $? -eq 0 ]; then
+   echo "Adding Cluster Name To Manifest Succeeded"
+else
+   echo "Adding Cluster Name To Manifest Failed"
+fi
+
+echo "*** Deploy Controller Manifest ***"
+kubectl apply -f v2_4_4_full.yaml
+
+echo "*** Download IngressClass and IngressClassParams Manifest ***"
+curl -Lo v2_4_4_ingclass.yaml https://github.com/kubernetes-sigs/aws-load-balancer-controller/releases/download/v2.4.4/v2_4_4_ingclass.yaml
+if [ $? -eq 0 ]; then
+   echo "Ingress Manifests Downloaded Successfully"
+else
+   echo "Ingress Manifests Failed to Download"
+fi
+
+echo " *** Apply Ingress Manifests to Cluster ***"
+kubectl apply -f v2_4_4_ingclass.yaml
+	
+echo "*** Verify Controller is Installed ***"
+kubectl get deployment -n kube-system aws-load-balancer-controller
