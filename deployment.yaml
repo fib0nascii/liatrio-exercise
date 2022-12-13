@@ -26,8 +26,8 @@ spec:
                       - amd64
                       - arm64
       containers:
-        - name: nginx
-          image: public.ecr.aws/nginx/nginx:1.21
+        - name: liatrio-time-exercise
+          image: 798870450882.dkr.ecr.us-east-1.amazonaws.com/liatrio-exercise-repo:latest 
           ports:
             - name: http
               containerPort: 8080
