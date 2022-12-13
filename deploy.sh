@@ -23,7 +23,7 @@ echo "*** Get EKS Cluster Name ***"
 CLUSTERNAME=$(eksctl get cluster --output=json | jq '.[].Name')
 
 echo "*** Update Kube-Config for EKS ***"
-aws eks update-kubeconfig --region us-east-1 --name=$CLUSTERNAME
+aws eks update-kubeconfig --region us-east-1 --name $(CLUSTERNAME)
 
 echo "*** Create Kubernetes Namespace"
 kubectl create namespace liatrio-time-exercise
