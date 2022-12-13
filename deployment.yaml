@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: liatrio-time-exercise
-  namespace: liatrio-time-exercise-namespace
+  namespace: liatrio-time-exercise
   labels:
     app: liatrio-time-exercise
 spec:
