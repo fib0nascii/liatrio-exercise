@@ -14,7 +14,7 @@ module "eks" {
     attach_cluster_primary_security_group = true
 
     # Disabling and using externally provided security groups
-    create_security_group = false
+    create_security_group = true
   }
 
   eks_managed_node_groups = {
