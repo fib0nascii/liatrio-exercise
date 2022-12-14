@@ -8,7 +8,7 @@
   - EKSCTL
   - Docker
 ````
-The prerequsites must be installed and the cli configured before following these steps
+The prerequisites must be installed and the cli configured before following these steps
 ### Usage
 
 #### Clone repository
