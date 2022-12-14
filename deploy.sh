@@ -44,7 +44,7 @@ aws iam create-policy \
     --policy-document file://iam_policy.json
 
 echo "*** Sleep for 2 minutes ***"
-sleep(120)
+sleep 2m
 
 echo "*** Create IAM Role For Load Balancer Controller ***"
 eksctl create iamserviceaccount \
