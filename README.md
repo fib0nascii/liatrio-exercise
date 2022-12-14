@@ -7,6 +7,7 @@
   - AWSCLI
   - EKSCTL
   - Docker
+  - Terraform
 ````
 The prerequisites must be installed and the cli configured before following these steps
 ### Usage
