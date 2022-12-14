@@ -46,7 +46,7 @@ aws iam create-policy \
 echo "*** Create IAM Role For Load Balancer Controller ***"
 eksctl create iamserviceaccount \
 --cluster=${CLUSTERNAME} \
---namespace=liatrio-time-exercise \
+--namespace=kube-system \
 --name=aws-load-balancer-controller \
 --role-name "AmazonEKSLoadBalancerControllerRole" \
 --attach-policy-arn=arn:aws:iam::798870450882:policy/AWSLoadBalancerControllerIAMPolicy \
