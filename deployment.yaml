@@ -1,36 +1,36 @@
----
 apiVersion: apps/v1
-kind: Deployment                 # Type of Kubernetes resource
+kind: Deployment
 metadata:
-  name: liatrio-time-exercise           # Name of the Kubernetes resource
+  name: liatrio-time-exercise
+  namespace: liatrio-time-exercise
+  labels:
+    app: liatrio-time-exercise
 spec:
-  replicas: 3                    # Number of pods to run at any given time
+  replicas: 3
   selector:
     matchLabels:
-      app: liatrio-time-exercise        # This deployment applies to any Pods matching the specified label
-  template:                      # This deployment will create a set of pods using the configurations in this template
+      app: liatrio-time-exercise
+  template:
     metadata:
-      labels:                    # The labels that will be applied to all of the pods in this deployment
+      labels:
         app: liatrio-time-exercise
-    spec:                        # Spec for the container which will run in the Pod
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - arm64
       containers:
         - name: liatrio-time-exercise
-          image: fibonascii/liatrio-time-exercise
-          imagePullPolicy: IfNotPresent
+          image: 798870450882.dkr.ecr.us-east-1.amazonaws.com/liatrio-exercise-repo:latest 
           ports:
-            - containerPort: 8080  # Should match the port number that the Go application listens on
-          livenessProbe:           # To check the health of the Pod
-            httpGet:
-              path: /health
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 15
-            timeoutSeconds: 5
-          readinessProbe:          # To check if the Pod is ready to serve traffic or not
-            httpGet:
-              path: /time
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
+            - name: http
+              containerPort: 8080
+          imagePullPolicy: IfNotPresent
+      nodeSelector:
+        kubernetes.io/os: linux
