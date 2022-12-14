@@ -43,6 +43,9 @@ aws iam create-policy \
     --policy-name AWSLoadBalancerControllerIAMPolicy \
     --policy-document file://iam_policy.json
 
+echo "*** Sleep for 2 minutes ***"
+sleep(120)
+
 echo "*** Create IAM Role For Load Balancer Controller ***"
 eksctl create iamserviceaccount \
 --cluster=${CLUSTERNAME} \
@@ -57,6 +60,14 @@ echo "*** Install Cert Manager ***"
 kubectl apply \
     --validate=false \
     -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
+
+echo "*** Add wait ***"
+
+kubectl wait \
+  --request-timeout=300s \
+  -n cert-manager \
+  --for=condition=Available deployment/cert-manager-webhook
+
 
 echo "*** Download Controller Manifest ***"
 curl -Lo v2_4_4_full.yaml https://github.com/kubernetes-sigs/aws-load-balancer-controller/releases/download/v2.4.4/v2_4_4_full.yaml
@@ -95,6 +106,9 @@ fi
 
 echo " *** Apply Ingress Manifests to Cluster ***"
 kubectl apply -f v2_4_4_ingclass.yaml
+
+echo "*** Apply Ingress.yaml ***"
+kubetl apply -f ingress.yaml
 	
 echo "*** Verify Controller is Installed ***"
 kubectl get deployment -n kube-system aws-load-balancer-controller
